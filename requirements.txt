@@ -1,0 +1,15 @@
+pandas
+numpy
+matplotlib
+scikit-learn
+seaborn
+ipykernel
+statsmodels
+openpyxl
+category_encoders
+feature_engine
+xgboost
+kneed 
+imblearn
+tabulate
+shap
