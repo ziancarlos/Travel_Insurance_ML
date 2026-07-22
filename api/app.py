@@ -27,6 +27,8 @@ MODEL_LOCATION = "ml_models/tuned_gradient_boost_v1.0.joblib"
 
 
 app = Flask(__name__)
+app.json.sort_keys = False
+
 api_bp = Blueprint("api", __name__)
 
 model = joblib.load(MODEL_LOCATION)

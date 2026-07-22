@@ -32,12 +32,10 @@ class PredictionService:
         prediction = self.repository.save(results, prediction)
 
         return {
+            "id": prediction.id,
+            "prediction_class": prediction.prediction_class,
+            "prediction_probability": prediction.prediction_probability,
             **results,
-            "prediction": {
-                "id": prediction.id,
-                "class": prediction.prediction_class,
-                "probability": prediction.prediction_probability
-            }
         }
     
     def get_predictions(self):
@@ -46,11 +44,22 @@ class PredictionService:
         return [
             {
                 "id": prediction.id,
+                "prediction_class": prediction.prediction_class,
+                "prediction_probability": prediction.prediction_probability,
                 "agency": prediction.agency,
                 "agency_type": prediction.agency_type,
+                "distribution_channel": prediction.distribution_channel,
+                "product_name": prediction.product_name,
                 "destination": prediction.destination,
-                "prediction_class": prediction.prediction_class,
-                "prediction_probability": prediction.prediction_probability
+                "duration": prediction.duration,
+                "net_sales": prediction.net_sales,
+                "commission": prediction.commission,
+                "age": prediction.age,
+                "is_refund": prediction.is_refund,
+                "suspected_fraud": prediction.suspected_fraud,
+                "commission_rate": prediction.commission_rate,
+                "model_version": prediction.model_version,
+                "created_at": prediction.created_at,
             }
             for prediction in predictions
         ]

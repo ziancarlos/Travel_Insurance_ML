@@ -56,3 +56,19 @@ services:
         retries: 5
       ports:
         - 3001:5432
+
+    streamlit-dev:
+      container_name: streamlit-dev
+      build:
+          context: ./streamlit
+          dockerfile: Dockerfile.dev    
+      environment:
+        - APP_ENV=dev  
+      ports:
+          - 3002:8501
+      volumes:
+        - ./streamlit:/app
+      restart: unless-stopped
+      depends_on:
+        api-dev: 
+          condition: service_started
