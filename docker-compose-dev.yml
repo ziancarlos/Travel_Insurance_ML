@@ -23,8 +23,24 @@ services:
       restart: unless-stopped
       depends_on:
         db-api-dev: 
+          condition: service_healthy
+        migration-dev:
           condition: service_completed_successfully
 
+    migration-dev:
+      container_name: migration-dev
+      build:
+        context: ./api
+        dockerfile: Dockerfile.api.dev
+      environment:
+        - APP_ENV=dev
+      volumes:
+        - ./api:/app
+      command: alembic upgrade head
+      depends_on:
+        db-api-dev:
+          condition: service_healthy
+      restart: "no"
 
     db-api-dev:
       container_name: db-api-dev
@@ -34,7 +50,7 @@ services:
         - POSTGRES_USER=root
         - POSTGRES_DB=dev
       healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U root"]
+        test: ["CMD-SHELL", "pg_isready -U root -d dev"]
         interval: 5s
         timeout: 5s
         retries: 5

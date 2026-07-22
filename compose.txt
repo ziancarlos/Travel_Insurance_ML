@@ -4,3 +4,13 @@ docker compose -f docker-compose-dev.yml up
 2. Build Again & Create And Start Compose 
 docker compose -f docker-compose-dev.yml up --build
 
+3. With Custom Name
+docker compose \
+  -f docker-compose-dev.yml \
+  -p travel-insurance-ml-dev \
+  up
+
+docker compose \
+  -f docker-compose-prod.yml \
+  -p travel-insurance-ml-prod \
+  up

@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+    api-prod:
+      container_name: api-prod
+      build:
+          context: ./api
+          dockerfile: Dockerfile.api.prod
+      environment:
+        - APP_ENV=prod
+      ports:
+          - 8080:3000
+      restart: unless-stopped
+      depends_on:
+        db-api-prod: 
+          condition: service_healthy
+        migration-prod:
+          condition: service_completed_successfully
+
+    migration-prod:
+      container_name: migration-prod
+      build:
+        context: ./api
+        dockerfile: Dockerfile.api.prod
+      environment:
+        - APP_ENV=prod
+      command: alembic upgrade head
+      depends_on:
+        db-api-prod:
+          condition: service_healthy
+      restart: "no"
+
+    db-api-prod:
+      container_name: db-api-prod
+      image: postgres:latest
+      environment:
+        - POSTGRES_PASSWORD=root
+        - POSTGRES_USER=root
+        - POSTGRES_DB=prod
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U root -d prod"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+      ports:
+        - 8081:5432
