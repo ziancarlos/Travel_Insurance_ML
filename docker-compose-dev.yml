@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+    api-dev:
+      container_name: api-dev
+      build:
+          context: ./api
+          dockerfile: Dockerfile.api.dev
+      environment:
+        - APP_ENV=dev
+      volumes:
+        # IMPORTANT (FOR HOT RELOAD)
+        # 1. ./api (Local Machine)
+        # 2. /app (Docker Container)
+        # - What is does? is to create a bindmount
+        # - Bindmount is as simple as mount the same file from host
+        # to container, any changes made in the host, container
+        # will have the same changes.
+
+        - ./api:/app
+      ports:
+          - 3000:3000
+      restart: unless-stopped
+      depends_on:
+        db-api-dev: 
+          condition: service_completed_successfully
+
+
+    db-api-dev:
+      container_name: db-api-dev
+      image: postgres:latest
+      environment:
+        - POSTGRES_PASSWORD=root
+        - POSTGRES_USER=root
+        - POSTGRES_DB=dev
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U root"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+      ports:
+        - 3001:5432

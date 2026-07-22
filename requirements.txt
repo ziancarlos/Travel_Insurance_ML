@@ -25,3 +25,8 @@ joblib==1.5.3
 cloudpickle==3.1.2
 tqdm==4.68.4
 tabulate==0.10.0
+
+flask==3.1
+pydantic==2.13
+python-dotenv==1.1
+sqlalchemy==2.0

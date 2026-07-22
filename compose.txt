@@ -1,0 +1,6 @@
+1. Create And Start Compose
+docker compose -f docker-compose-dev.yml up
+
+2. Build Again & Create And Start Compose 
+docker compose -f docker-compose-dev.yml up --build
+
