@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Travel Insurance Fraud Prediction API
+  title: Travel Insurance Claim Prediction API
   description: API for creating and retrieving travel insurance claim predictions
   version: "1.0.0"
 
@@ -43,7 +43,7 @@ paths:
       tags:
         - Predictions
       summary: Create a new prediction
-      description: Submit travel insurance data to generate a fraud prediction
+      description: Submit travel insurance data to generate a Claim prediction
       operationId: createPrediction
       requestBody:
         required: true
@@ -361,7 +361,7 @@ components:
         prediction_class:
           type: string
           description: Predicted classification label
-          example: "Not Fraud"
+          example: "Not Claim"
         prediction_probability:
           type: number
           format: float
