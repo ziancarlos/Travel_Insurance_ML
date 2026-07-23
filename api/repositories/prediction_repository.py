@@ -13,11 +13,12 @@ class PredictionRepository:
 
         df.rename(columns=COLUMN_MAPPING, inplace=True)
 
-        prediction = self.model.predict(df)[0]
+        best_threshold = 0.313506
         prediction_probability = self.model.predict_proba(df)[0][1]
-
+        prediction_class = int(prediction_probability >= best_threshold)
+        
         return  {
-            "prediction": int(prediction),
+            "prediction": prediction_class,
             "probability": float(prediction_probability)
         }
         

@@ -1,3 +1,5 @@
 travel/
 api/.env.dev
 api/.env.prod
+streamlit/.env.dev
+streamlit/.env.prod

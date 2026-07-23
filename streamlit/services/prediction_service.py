@@ -17,10 +17,10 @@ class PredictionService:
         )
 
         return response.status_code, response.json()
-    
+
     def get_predictions(self):
         response = requests.get(
-            f"{self.base_url}/predictions",
+            f"{self.base_url}/predicts",
             headers={
                 "Authorization": self.auth_token
             },
