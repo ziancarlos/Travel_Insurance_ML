@@ -10,7 +10,7 @@ docker compose \
   -p travel-insurance-ml-dev \
   up
 
-docker compose \
-  -f docker-compose-prod.yml \
-  -p travel-insurance-ml-prod \
-  up
+docker compose -f docker-compose-prod.yml -p travel-insurance-ml-prod up
+
+test
+kgGqf9.WEM7dyN_

@@ -19,3 +19,5 @@ psycopg2-binary==2.9.11
 alembic==1.16.4
 
 werkzeug
+
+flasgger

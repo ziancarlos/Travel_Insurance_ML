@@ -20,6 +20,9 @@ from controllers.prediction_controller import PredictionController
 from routers.prediction_router import PredictionRouter
 import joblib
 
+from flasgger import Swagger
+
+
 env = get_env()
 API_PORT=int(env.getenv("API_PORT", 3000))
 DEBUG_MODE = env.getenv("DEBUG", "True").lower() == "true"
@@ -28,6 +31,15 @@ MODEL_LOCATION = "ml_models/tuned_gradient_boost_v1.0.joblib"
 
 app = Flask(__name__)
 app.json.sort_keys = False
+
+app.config['SWAGGER'] = {
+    'title': 'Travel Insurance Fraud Prediction API',
+    'uiversion': 3,
+    'openapi': '3.0.3',
+    'specs_route': '/apidocs/'  # where Swagger UI will be served
+}
+
+swagger = Swagger(app, template_file='swagger.yaml')
 
 api_bp = Blueprint("api", __name__)
 
@@ -39,13 +51,13 @@ prediction_router = PredictionRouter(prediction_controller)
 prediction_bp = prediction_router.register()
 
 
-app.before_request(
+api_bp.before_request(
     validate_token
 )
-app.before_request(
+api_bp.before_request(
     create_db_session
 )
-app.teardown_request(close_db_session)
+api_bp.teardown_request(close_db_session)
 
 api_bp.register_blueprint(
     prediction_bp,

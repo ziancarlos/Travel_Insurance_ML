@@ -10,5 +10,5 @@ def validate_token():
     client_token = request.headers.get("Authorization")
     
     if client_token != TOKEN:
-        raise Unauthorized("Auth Token Is Not Authorized")
+        raise Unauthorized("Unauthorized")
 

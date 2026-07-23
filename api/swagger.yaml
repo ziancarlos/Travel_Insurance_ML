@@ -1,0 +1,430 @@
+openapi: 3.0.3
+info:
+  title: Travel Insurance Fraud Prediction API
+  description: API for creating and retrieving travel insurance claim predictions
+  version: "1.0.0"
+
+servers:
+  - url: /api
+    description: Base API path
+
+security:
+  - AuthorizationHeader: []
+
+tags:
+  - name: Predictions
+    description: Endpoints for creating and fetching predictions
+
+paths:
+  /predicts:
+    get:
+      tags:
+        - Predictions
+      summary: Get all predictions
+      description: Fetch a list of all previously created predictions
+      operationId: getPredictions
+      responses:
+        "200":
+          description: Successfully fetched predictions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully fetched predictions"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PredictionResponse"
+
+    post:
+      tags:
+        - Predictions
+      summary: Create a new prediction
+      description: Submit travel insurance data to generate a fraud prediction
+      operationId: createPrediction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePredictionRequest"
+      responses:
+        "200":
+          description: Successfully created a prediction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Succcessfully Created A Predictions"
+                  data:
+                    $ref: "#/components/schemas/PredictionResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+
+components:
+  securitySchemes:
+    AuthorizationHeader:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >
+        Pass the raw token directly in the Authorization header
+        (no "Bearer " prefix), e.g. Authorization: <your-token>
+
+  schemas:
+    AgencyType:
+      type: string
+      enum:
+        - C2B
+        - EPX
+        - JZI
+        - CWT
+        - LWC
+        - ART
+        - CSR
+        - SSI
+        - RAB
+        - KML
+        - TST
+        - TTW
+        - JWT
+        - ADM
+        - CCR
+        - CBH
+
+    AgencyCategory:
+      type: string
+      enum:
+        - Airlines
+        - Travel Agency
+
+    Channel:
+      type: string
+      enum:
+        - Online
+        - Offline
+
+    ProductName:
+      type: string
+      enum:
+        - Annual Silver Plan
+        - Cancellation Plan
+        - Basic Plan
+        - 2 way Comprehensive Plan
+        - Bronze Plan
+        - 1 way Comprehensive Plan
+        - Rental Vehicle Excess Insurance
+        - Single Trip Travel Protect Gold
+        - Silver Plan
+        - Value Plan
+        - 24 Protect
+        - Annual Travel Protect Gold
+        - Comprehensive Plan
+        - Ticket Protector
+        - Travel Cruise Protect
+        - Single Trip Travel Protect Silver
+        - Individual Comprehensive Plan
+        - Gold Plan
+        - Annual Gold Plan
+        - Child Comprehensive Plan
+        - Premier Plan
+        - Annual Travel Protect Silver
+        - Single Trip Travel Protect Platinum
+        - Annual Travel Protect Platinum
+        - Spouse or Parents Comprehensive Plan
+        - Travel Cruise Protect Family
+
+    Destination:
+      type: string
+      description: >
+        ISO-style country/territory name. See full enum list in
+        constants/prediction_constant.py (126 values).
+      enum:
+        - SINGAPORE
+        - MALAYSIA
+        - INDIA
+        - UNITED STATES
+        - KOREA, REPUBLIC OF
+        - THAILAND
+        - GERMANY
+        - JAPAN
+        - INDONESIA
+        - VIET NAM
+        - AUSTRALIA
+        - FINLAND
+        - UNITED KINGDOM
+        - SRI LANKA
+        - SPAIN
+        - HONG KONG
+        - MACAO
+        - CHINA
+        - UNITED ARAB EMIRATES
+        - IRAN, ISLAMIC REPUBLIC OF
+        - TAIWAN, PROVINCE OF CHINA
+        - POLAND
+        - CANADA
+        - OMAN
+        - PHILIPPINES
+        - GREECE
+        - BELGIUM
+        - TURKEY
+        - BRUNEI DARUSSALAM
+        - DENMARK
+        - SWITZERLAND
+        - NETHERLANDS
+        - SWEDEN
+        - MYANMAR
+        - KENYA
+        - CZECH REPUBLIC
+        - FRANCE
+        - RUSSIAN FEDERATION
+        - PAKISTAN
+        - ARGENTINA
+        - TANZANIA, UNITED REPUBLIC OF
+        - SERBIA
+        - ITALY
+        - CROATIA
+        - NEW ZEALAND
+        - PERU
+        - MONGOLIA
+        - CAMBODIA
+        - QATAR
+        - NORWAY
+        - LUXEMBOURG
+        - MALTA
+        - LAO PEOPLE'S DEMOCRATIC REPUBLIC
+        - ISRAEL
+        - SAUDI ARABIA
+        - AUSTRIA
+        - PORTUGAL
+        - NEPAL
+        - UKRAINE
+        - ESTONIA
+        - ICELAND
+        - BRAZIL
+        - MEXICO
+        - CAYMAN ISLANDS
+        - PANAMA
+        - BANGLADESH
+        - TURKMENISTAN
+        - BAHRAIN
+        - KAZAKHSTAN
+        - TUNISIA
+        - IRELAND
+        - ETHIOPIA
+        - NORTHERN MARIANA ISLANDS
+        - MALDIVES
+        - SOUTH AFRICA
+        - VENEZUELA
+        - COSTA RICA
+        - JORDAN
+        - MALI
+        - CYPRUS
+        - MAURITIUS
+        - LEBANON
+        - KUWAIT
+        - AZERBAIJAN
+        - HUNGARY
+        - BHUTAN
+        - BELARUS
+        - MOROCCO
+        - ECUADOR
+        - UZBEKISTAN
+        - CHILE
+        - FIJI
+        - PAPUA NEW GUINEA
+        - ANGOLA
+        - FRENCH POLYNESIA
+        - NIGERIA
+        - MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF
+        - NAMIBIA
+        - GEORGIA
+        - COLOMBIA
+        - SLOVENIA
+        - EGYPT
+        - ZIMBABWE
+        - BULGARIA
+        - BERMUDA
+        - URUGUAY
+        - GUINEA
+        - GHANA
+        - BOLIVIA
+        - TRINIDAD AND TOBAGO
+        - VANUATU
+        - GUAM
+        - UGANDA
+        - JAMAICA
+        - LATVIA
+        - ROMANIA
+        - REPUBLIC OF MONTENEGRO
+        - KYRGYZSTAN
+        - GUADELOUPE
+        - ZAMBIA
+        - RWANDA
+        - BOTSWANA
+        - GUYANA
+        - LITHUANIA
+        - GUINEA-BISSAU
+        - SENEGAL
+        - CAMEROON
+        - TIBET
+        - SAMOA
+        - PUERTO RICO
+        - TAJIKISTAN
+        - ARMENIA
+        - KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF
+        - FAROE ISLANDS
+        - DOMINICAN REPUBLIC
+        - MOLDOVA, REPUBLIC OF
+        - BENIN
+        - REUNION
+
+    YesNo:
+      type: string
+      enum:
+        - "Yes"
+        - "No"
+
+    CreatePredictionRequest:
+      type: object
+      required:
+        - agency
+        - agency_type
+        - distribution_channel
+        - product_name
+        - destination
+        - duration
+        - net_sales
+        - commission
+        - age
+      properties:
+        agency:
+          $ref: "#/components/schemas/AgencyType"
+        agency_type:
+          $ref: "#/components/schemas/AgencyCategory"
+        distribution_channel:
+          $ref: "#/components/schemas/Channel"
+        product_name:
+          $ref: "#/components/schemas/ProductName"
+        destination:
+          $ref: "#/components/schemas/Destination"
+        duration:
+          type: integer
+          minimum: 1
+          exclusiveMinimum: false
+          description: Durasi perjalanan dalam hari
+          example: 7
+        net_sales:
+          type: number
+          format: float
+          description: Nilai penjualan bersih (bisa negatif jika refund)
+          example: 39.6
+        commission:
+          type: number
+          format: float
+          minimum: 0
+          description: Nilai komisi (minimal 0)
+          example: 9.9
+        age:
+          type: integer
+          minimum: 0
+          maximum: 120
+          description: Usia penumpang
+          example: 35
+      example:
+        agency: "C2B"
+        agency_type: "Airlines"
+        distribution_channel: "Online"
+        product_name: "Basic Plan"
+        destination: "SINGAPORE"
+        duration: 7
+        net_sales: 39.6
+        commission: 9.9
+        age: 35
+
+    PredictionResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        prediction_class:
+          type: string
+          description: Predicted classification label
+          example: "Not Fraud"
+        prediction_probability:
+          type: number
+          format: float
+          description: Model confidence score for the predicted class
+          example: 0.87
+        agency:
+          $ref: "#/components/schemas/AgencyType"
+        agency_type:
+          $ref: "#/components/schemas/AgencyCategory"
+        distribution_channel:
+          $ref: "#/components/schemas/Channel"
+        product_name:
+          $ref: "#/components/schemas/ProductName"
+        destination:
+          $ref: "#/components/schemas/Destination"
+        duration:
+          type: integer
+          example: 7
+        net_sales:
+          type: number
+          format: float
+          example: 39.6
+        commission:
+          type: number
+          format: float
+          example: 9.9
+        age:
+          type: integer
+          example: 35
+        is_refund:
+          $ref: "#/components/schemas/YesNo"
+        suspected_fraud:
+          $ref: "#/components/schemas/YesNo"
+        commission_rate:
+          type: number
+          format: float
+          example: 0.25
+        model_version:
+          type: string
+          description: Only present on GET /predicts responses
+          example: "v1.0.0"
+        created_at:
+          type: string
+          format: date-time
+          description: Only present on GET /predicts responses
+          example: "2026-07-23T10:15:00Z"
+
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Validation failed"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              loc:
+                type: array
+                items:
+                  type: string
+              msg:
+                type: string
+              type:
+                type: string
